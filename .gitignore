@@ -1,0 +1,8 @@
+nvim/autoload
+nvim/plugged
+nvim/tmp
+qutebrowser/bookmarks
+qutebrowser/quickmarks
+qutebrowser/autoconfig.yml
+qutebrowser/qsettings
+**/__pycache__
