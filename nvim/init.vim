@@ -30,7 +30,7 @@ Plug 'rhysd/vim-color-spring-night'
 
 Plug 'dkarter/bullets.vim'
 Plug 'metakirby5/codi.vim'
-Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & npm install'  }
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
 Plug 'dense-analysis/ale'
 Plug 'junegunn/fzf.vim'
 Plug 'SirVer/ultisnips'
@@ -43,6 +43,7 @@ Plug 'tpope/vim-sensible'         " default shit
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'Yggdroot/indentLine'
 " Plug 'jiangmiao/auto-pairs'
+Plug 'Raimondi/delimitMate'
 Plug 'dbakker/vim-projectroot'
 
 Plug 'godlygeek/tabular'          " another alignment thing
@@ -82,13 +83,16 @@ function! CocInstallAll()
         \ coc-css
         \ coc-python
         \ coc-json
-        \ coc-rls
+        \ coc-rust-analyzer
+        " \ coc-rls
 endfunction
 
 
 
 " %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 """ Plugin Options
+"" markdown-preview
+let g:mkdp_browser = 'qutebrowser'
 "" vim-easy-align
 xmap ga <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)
@@ -377,6 +381,7 @@ map <C-l> <C-w>l
 " Bindings to edit/reload vimrc
 nmap <silent> <leader>C :e $MYVIMRC<CR>
 
+nmap silent <C-S-O> :execute "normal \<C-I>"
 nmap <leader>q :NERDTreeToggle<CR>
 nmap <leader>f :FZF<CR>
 nmap \ <leader>q
@@ -416,6 +421,7 @@ autocmd FileType tex setlocal sw=2 iskeyword+=: tw=80
 autocmd FileType html setlocal shiftwidth=2 tabstop=2 softtabstop=2
 autocmd FileType css setlocal shiftwidth=2 tabstop=2 softtabstop=2
 autocmd FileType xml setlocal shiftwidth=2 tabstop=2 softtabstop=2
+autocmd FileType json setlocal shiftwidth=2 tabstop=2 softtabstop=2
 
 "" Config files
 autocmd BufWritePost ~/*/qutebrowser/config.py silent !qutebrowser :config-source

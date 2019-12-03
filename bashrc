@@ -33,7 +33,7 @@ unset color_prompt force_color_prompt
 [ -f ~/.bash_aliases ] && . ~/.bash_aliases
 
 # adding bin directory in home to $PATH
-export PATH=${PATH}:~/bin
+export PATH=${PATH}:~/bin:~/.cargo/bin
 
 export EDITOR='nvim'
 export TERMINAL='~/bin/st/st'

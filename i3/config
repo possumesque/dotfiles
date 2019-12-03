@@ -58,6 +58,14 @@ focus_follows_mouse yes
 # start a terminal
 bindsym Mod4+Return exec /home/possumesque/bin/st/st
 
+bindsym Mod4+Shift+s mode "screenshot"
+mode "screenshot" {
+    bindsym r mode "default", exec /home/possumesque/bin/screenshot.sh region # TODO fix
+    bindsym w mode "default", exec /home/possumesque/bin/screenshot.sh window
+    bindsym s mode "default", exec /home/possumesque/bin/screenshot.sh screen
+    bindsym Escape mode "default"
+}
+
 # # start browser
 # bindsym Mod4+ exec qutebrowser
 
