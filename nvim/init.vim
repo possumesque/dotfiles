@@ -43,7 +43,7 @@ Plug 'tpope/vim-sensible'         " default shit
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'Yggdroot/indentLine'
 " Plug 'jiangmiao/auto-pairs'
-Plug 'Raimondi/delimitMate'
+" Plug 'Raimondi/delimitMate'
 Plug 'dbakker/vim-projectroot'
 
 Plug 'godlygeek/tabular'          " another alignment thing
@@ -62,6 +62,16 @@ Plug 'salsifis/vim-transpose'     " swap rows/columns in text array
 Plug 'vim-pandoc/vim-pandoc'
 Plug 'vim-pandoc/vim-pandoc-syntax'
 Plug 'rust-lang/rust.vim'
+
+"" Text objects
+Plug 'kana/vim-textobj-user' " library
+Plug 'pianohacker/vim-textobj-variable-segment' " av/iv
+Plug 'sgur/vim-textobj-parameter' " a,/i,
+Plug 'Julian/vim-textobj-brace' " aj/ij
+Plug 'deathlyfrantic/vim-textobj-blanklines' " a<Space>/i<Space>
+Plug 'kana/vim-textobj-line' " al/il
+Plug 'kana/vim-textobj-indent' " ai/ii/aI/iI
+Plug 'glts/vim-textobj-comment' " ac/ic
 
 " Plug 'scrooloose/nerdcommenter'
 " Plug 'alvan/vim-closetag'
@@ -367,8 +377,8 @@ set directory^=~/.config/nvim/tmp/
 let mapleader=","
 
 noremap Q @q
-nnoremap j gj
-nnoremap k gk
+" nnoremap j gj
+" nnoremap k gk
 noremap <C-s> :wall<CR>
 nmap <silent> <leader><leader> :noh<CR>
 nnoremap <leader>l :ls<cr>:b<space>
@@ -386,7 +396,7 @@ nmap <leader>q :NERDTreeToggle<CR>
 nmap <leader>f :FZF<CR>
 nmap \ <leader>q
 nmap <C-\> :NERDTreeFind<CR>
-nmap <leader>g :Goyo<CR>
+nmap silent <leader>g :Goyo<CR>
 " nmap <Tab> :bnext<CR>
 " nmap <S-Tab> :bprevious<CR>
 " %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -401,7 +411,16 @@ function! TrimWhitespace()
     %s/\\\@<!\s\+$//e
     call winrestview(l:save)
 endfunction
+
 autocmd BufWritePre * call TrimWhitespace()
+
+function! FormatJSON()
+    :%!python -m json.tool<CR>
+endfunction
+
+function! PlugPaste()
+   :normal ] jp0df/.iPlug 'A'0<CR>
+endfunction
 " %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
@@ -439,8 +458,6 @@ autocmd BufWritePost $MYVIMRC silent :so $MYVIMRC
 " ranger integration?
 " tmux integration
 " %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
 
 " jumps to previous position when opening a file
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
