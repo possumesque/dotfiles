@@ -1,3 +1,8 @@
+" TODO add rust support to codi with runner
+
+" clear autocommands
+autocmd!
+
 " %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 """ Plugin Manager
 if empty(glob('~/.config/nvim/autoload/plug.vim'))
@@ -86,7 +91,7 @@ function! CocInstallAll()
         \ coc-ultisnips
         \ coc-yank
         \ coc-git
-        \ coc-highlight
+        " \ coc-highlight
         \ coc-eslint
         \ coc-prettier
         \ coc-tabnine
@@ -175,13 +180,17 @@ command! -bang -nargs=* Rg
       \   fzf#vim#with_preview({'options': '--delimiter : --nth 4.. -e'}, 'down:70%'),
       \   <bang>0)
 
-autocmd! FileType fzf tnoremap <buffer> <esc> <c-c>
-autocmd! FileType fzf tunmap <buffer> <c-s>
-
 let g:fzf_action = {
-  \ 'ctrl-o': 'edit',
-  \ 'ctrl-s': 'split',
-  \ 'enter': 'vsplit' }
+  \ 'ctrl-q': 'aboveleft vsplit',
+  \ 'ctrl-w': 'belowright split',
+  \ 'ctrl-e': 'aboveleft split',
+  \ 'ctrl-r': 'belowright vsplit',
+  \ 'enter': 'edit' }
+autocmd FileType fzf tnoremap <buffer> <C-s>h <C-q>
+autocmd FileType fzf tnoremap <buffer> <C-s>j <C-w>
+autocmd FileType fzf tnoremap <buffer> <C-s>k <C-e>
+autocmd FileType fzf tnoremap <buffer> <C-s>l <C-r>
+autocmd FileType fzf tnoremap <buffer> <esc> <c-c>
 
 "" Codi
 function! CodiScratchpad()
@@ -255,7 +264,7 @@ function! s:show_documentation()
 endfunction
 
 " Highlight symbol under cursor on CursorHold
-autocmd CursorHold * silent call CocActionAsync('highlight')
+" autocmd CursorHold * silent call CocActionAsync('highlight')
 
 " Remap for rename current word
 nmap <leader>rn <Plug>(coc-rename)
@@ -264,13 +273,13 @@ nmap <leader>rn <Plug>(coc-rename)
 xmap <leader>f  <Plug>(coc-format-selected)
 nmap <leader>f  <Plug>(coc-format-selected)
 
-augroup mygroup
-  autocmd!
-  " Setup formatexpr specified filetype(s).
-  autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
-  " Update signature help on jump placeholder
-  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
-augroup end
+" augroup mygroup
+"   autocmd!
+"   " Setup formatexpr specified filetype(s).
+"   autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+"   " Update signature help on jump placeholder
+"   autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+" augroup end
 
 " Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
 xmap <leader>a  <Plug>(coc-codeaction-selected)
@@ -303,7 +312,7 @@ command! -nargs=? Fold :call     CocAction('fold', <f-args>)
 command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
 
 " Add status line support, for integration with other plugin, checkout `:h coc-status`
-set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+" set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 
 " Using CocList
 " Show all diagnostics
@@ -331,11 +340,11 @@ nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
 """ Coloring
 syntax on
 color dracula
-highlight Pmenu guibg=NONE ctermbg=NONE
-highlight Comment gui=bold
-highlight Normal guibg=NONE ctermbg=NONE
-highlight LineNr guibg=NONE ctermbg=NONE
-highlight NonText guibg=none
+" highlight Pmenu guibg=NONE ctermbg=NONE
+" highlight Comment gui=bold
+" highlight Normal guibg=NONE ctermbg=NONE
+" highlight LineNr guibg=NONE ctermbg=NONE
+" highlight NonText guibg=none
 " %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
@@ -379,7 +388,7 @@ let mapleader=","
 noremap Q @q
 " nnoremap j gj
 " nnoremap k gk
-noremap <C-s> :wall<CR>
+nnoremap <C-s> :wall<CR>
 nmap <silent> <leader><leader> :noh<CR>
 nnoremap <leader>l :ls<cr>:b<space>
 
@@ -391,12 +400,12 @@ map <C-l> <C-w>l
 " Bindings to edit/reload vimrc
 nmap <silent> <leader>C :e $MYVIMRC<CR>
 
-nmap silent <C-S-O> :execute "normal \<C-I>"
+nmap <silent> <C-S-O> :execute "normal \<C-I>"
 nmap <leader>q :NERDTreeToggle<CR>
 nmap <leader>f :FZF<CR>
 nmap \ <leader>q
 nmap <C-\> :NERDTreeFind<CR>
-nmap silent <leader>g :Goyo<CR>
+nmap <silent> <leader>g :Goyo<CR>
 " nmap <Tab> :bnext<CR>
 " nmap <S-Tab> :bprevious<CR>
 " %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -460,4 +469,4 @@ autocmd BufWritePost $MYVIMRC silent :so $MYVIMRC
 " %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 " jumps to previous position when opening a file
-au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
