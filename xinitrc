@@ -22,7 +22,7 @@ if [ -s ~/.Xmodmap ]; then
 fi
 
 # sxhkd &
-compton -c --backend glx --vsync opengl &
+picom -c --backend glx --vsync opengl &
 xfce4-power-manager &
 nm-applet &
 blueman-applet &
