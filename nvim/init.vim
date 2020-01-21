@@ -35,8 +35,8 @@ Plug 'rhysd/vim-color-spring-night'
 
 Plug 'dkarter/bullets.vim'
 Plug 'metakirby5/codi.vim'
-Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
 Plug 'dense-analysis/ale'
+" Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'SirVer/ultisnips'
 Plug 'junegunn/vim-easy-align'    " align lines around = sign, etc
@@ -47,8 +47,6 @@ Plug 'tpope/vim-abolish'          " change fooBar to foo_bar, case insensitive :
 Plug 'tpope/vim-sensible'         " default shit
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'Yggdroot/indentLine'
-" Plug 'jiangmiao/auto-pairs'
-" Plug 'Raimondi/delimitMate'
 Plug 'dbakker/vim-projectroot'
 
 Plug 'godlygeek/tabular'          " another alignment thing
@@ -67,6 +65,7 @@ Plug 'salsifis/vim-transpose'     " swap rows/columns in text array
 Plug 'vim-pandoc/vim-pandoc'
 Plug 'vim-pandoc/vim-pandoc-syntax'
 Plug 'rust-lang/rust.vim'
+Plug 'alvan/vim-closetag'   " autoclose html tags
 
 "" Text objects
 Plug 'kana/vim-textobj-user' " library
@@ -78,9 +77,6 @@ Plug 'kana/vim-textobj-line' " al/il
 Plug 'kana/vim-textobj-indent' " ai/ii/aI/iI
 Plug 'glts/vim-textobj-comment' " ac/ic
 
-" Plug 'scrooloose/nerdcommenter'
-" Plug 'alvan/vim-closetag'
-
 call plug#end()
 " %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -91,7 +87,7 @@ function! CocInstallAll()
         \ coc-ultisnips
         \ coc-yank
         \ coc-git
-        " \ coc-highlight
+        \ coc-highlight
         \ coc-eslint
         \ coc-prettier
         \ coc-tabnine
@@ -101,8 +97,6 @@ function! CocInstallAll()
         \ coc-rust-analyzer
         " \ coc-rls
 endfunction
-
-
 
 " %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 """ Plugin Options
@@ -136,9 +130,11 @@ let g:airline_section_warning = ''
 "" fzf
 " Reverse the layout to make the FZF list top-down
 " let $FZF_DEFAULT_OPTS='--layout=reverse --ansi --preview (highlight -O ansi -l {} 2>/dev/null || bat {} || tree -C {}) 2>/dev/null'
-let $FZF_DEFAULT_OPTS='--layout=reverse'
+" let $FZF_DEFAULT_OPTS='--layout=reverse'
 " Using the custom window creation function
-let g:fzf_layout = { 'window': 'call FloatingFZF()' }
+" let g:fzf_layout = { 'window': 'call FloatingFZF()' }
+let g:fzf_layout = { 'window': 'enew' }
+" let g:fzf_layout = { 'down': '~50%' }
 " Function to create the custom floating window
 function! FloatingFZF()
   " creates a scratch, unlisted, new, empty, unnamed buffer
@@ -162,23 +158,22 @@ function! FloatingFZF()
   " open the new window, floating, and enter to it
   call nvim_open_win(buf, v:true, opts)
 endfunction
-" file finder mapping
-nmap <c-p> :<c-u>ProjectRootExe Files<CR>
-" general code finder in all files mapping
-nmap <c-g> :<c-u>ProjectRootExe Rg<CR>
-" commands finder mapping
-nmap <leader>c :Commands<CR>
+
+
 " Files command with preview window
 " let $FZF_DEFAULT_OPTS='--layout=reverse'
 command! -bang -nargs=? -complete=dir Files
-  \ call fzf#vim#files(<q-args>, fzf#vim#with_preview('down:70%'), <bang>0)
+  \ call fzf#vim#files(<q-args>, fzf#vim#with_preview('up:70%'), <bang>0)
+command! -bang -nargs=? -complete=dir GFiles
+  \ call fzf#vim#gitfiles(<q-args>, fzf#vim#with_preview('up:70%'), <bang>0)
 
 " Ripgrep setting with preview window
 command! -bang -nargs=* Rg
       \ call fzf#vim#grep(
       \   'rg --column --no-heading --fixed-strings --line-number --smart-case '.shellescape(<q-args>), 1,
-      \   fzf#vim#with_preview({'options': '--delimiter : --nth 4.. -e'}, 'down:70%'),
+      \   fzf#vim#with_preview({'options': '--delimiter : --nth 4.. -e'}, 'up:70%'),
       \   <bang>0)
+
 
 let g:fzf_action = {
   \ 'ctrl-q': 'aboveleft vsplit',
@@ -190,7 +185,6 @@ autocmd FileType fzf tnoremap <buffer> <C-s>h <C-q>
 autocmd FileType fzf tnoremap <buffer> <C-s>j <C-w>
 autocmd FileType fzf tnoremap <buffer> <C-s>k <C-e>
 autocmd FileType fzf tnoremap <buffer> <C-s>l <C-r>
-autocmd FileType fzf tnoremap <buffer> <esc> <c-c>
 
 "" Codi
 function! CodiScratchpad()
@@ -270,8 +264,8 @@ endfunction
 nmap <leader>rn <Plug>(coc-rename)
 
 " Remap for format selected region
-xmap <leader>f  <Plug>(coc-format-selected)
-nmap <leader>f  <Plug>(coc-format-selected)
+" xmap <leader>f  <Plug>(coc-format-selected)
+" nmap <leader>f  <Plug>(coc-format-selected)
 
 " augroup mygroup
 "   autocmd!
@@ -298,9 +292,9 @@ omap if <Plug>(coc-funcobj-i)
 omap af <Plug>(coc-funcobj-a)
 
 " Use <tab> for select selections ranges, needs server support, like: coc-tsserver, coc-python
-nmap <silent> <TAB> <Plug>(coc-range-select)
-xmap <silent> <TAB> <Plug>(coc-range-select)
-xmap <silent> <S-TAB> <Plug>(coc-range-select-backword)
+" nmap <silent> <TAB> <Plug>(coc-range-select)
+" xmap <silent> <TAB> <Plug>(coc-range-select)
+" xmap <silent> <S-TAB> <Plug>(coc-range-select-backward)
 
 " Use `:Format` to format current buffer
 command! -nargs=0 Format :call CocAction('format')
@@ -340,11 +334,11 @@ nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
 """ Coloring
 syntax on
 color dracula
-" highlight Pmenu guibg=NONE ctermbg=NONE
-" highlight Comment gui=bold
-" highlight Normal guibg=NONE ctermbg=NONE
-" highlight LineNr guibg=NONE ctermbg=NONE
-" highlight NonText guibg=none
+highlight Pmenu guibg=NONE ctermbg=NONE
+highlight Comment gui=bold
+highlight Normal guibg=NONE ctermbg=NONE
+highlight LineNr guibg=NONE ctermbg=NONE
+highlight NonText guibg=none
 " %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
@@ -390,7 +384,6 @@ noremap Q @q
 " nnoremap k gk
 nnoremap <C-s> :wall<CR>
 nmap <silent> <leader><leader> :noh<CR>
-nnoremap <leader>l :ls<cr>:b<space>
 
 map <C-h> <C-w>h
 map <C-j> <C-w>j
@@ -400,14 +393,15 @@ map <C-l> <C-w>l
 " Bindings to edit/reload vimrc
 nmap <silent> <leader>C :e $MYVIMRC<CR>
 
-nmap <silent> <C-S-O> :execute "normal \<C-I>"
-nmap <leader>q :NERDTreeToggle<CR>
-nmap <leader>f :FZF<CR>
-nmap \ <leader>q
-nmap <C-\> :NERDTreeFind<CR>
-nmap <silent> <leader>g :Goyo<CR>
-" nmap <Tab> :bnext<CR>
-" nmap <S-Tab> :bprevious<CR>
+nmap <silent> <C-S-o> \<C-i>
+tnoremap <Esc> <C-\><C-n>
+autocmd FileType fzf tnoremap <buffer> <esc> <c-c>
+nmap <silent> <leader>r :below split<CR><Esc>:term<CR>A
+nmap <silent> <leader>G :Goyo<CR>
+nmap <silent> <leader>f :<c-u>ProjectRootExe GFiles<CR>
+nmap <silent> <leader>g :<c-u>ProjectRootExe Rg<CR>
+nmap <silent> <leader>b :<c-u>Buffers<CR>
+nmap <silent> <leader>t :<c-u>Tags<CR>
 " %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
@@ -436,6 +430,13 @@ endfunction
 
 " %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 """ Filetype specific stuff
+
+"" Help
+autocmd FileType help map <buffer> <ESC> :close<CR>
+
+"" Terminal
+autocmd TermOpen * setlocal nonumber norelativenumber
+
 "" Haskell
 autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
 
