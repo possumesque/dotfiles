@@ -6,3 +6,4 @@ qutebrowser/quickmarks
 qutebrowser/autoconfig.yml
 qutebrowser/qsettings
 **/__pycache__
+**/tags
