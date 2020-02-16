@@ -2,7 +2,7 @@
     link:
       relink: true
       create: true
-      force: true # only with -f flag
+      # force: true # only with -f flag
 
 - clean: ['~', "~/.config"]
 

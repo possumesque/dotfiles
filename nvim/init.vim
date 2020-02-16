@@ -248,10 +248,23 @@ noremap Q @q
 nnoremap <C-s> :wall<CR>
 nmap <silent> <leader><leader> :noh<CR>
 
-map <C-h> <C-w>h
-map <C-j> <C-w>j
-map <C-k> <C-w>k
-map <C-l> <C-w>l
+noremap <C-h> <C-w>h
+noremap <C-j> <C-w>j
+noremap <C-k> <C-w>k
+noremap <C-l> <C-w>l
+tmap <silent> <C-h> <Esc><C-w>h:if match(@%, "term://") == 0 \| startinsert \| endif<CR>
+tmap <silent> <C-j> <Esc><C-w>j:if match(@%, "term://") == 0 \| startinsert \| endif<CR>
+tmap <silent> <C-k> <Esc><C-w>k:if match(@%, "term://") == 0 \| startinsert \| endif<CR>
+tmap <silent> <C-l> <Esc><C-w>l:if match(@%, "term://") == 0 \| startinsert \| endif<CR>
+tnoremap \<C-h> \<C-h>
+tnoremap \<C-j> \<C-j>
+tnoremap \<C-k> \<C-k>
+tnoremap \<C-l> \<C-l>
+autocmd WinEnter term://* normal A
+autocmd FileType fzf tnoremap <buffer> <C-h> <C-h>
+autocmd FileType fzf tnoremap <buffer> <C-j> <C-j>
+autocmd FileType fzf tnoremap <buffer> <C-k> <C-k>
+autocmd FileType fzf tnoremap <buffer> <C-l> <C-l>
 
 " Bindings to edit/reload vimrc
 nmap <silent> <leader>C :e $MYVIMRC<CR>
